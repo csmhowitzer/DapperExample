@@ -42,6 +42,7 @@ public class EmployeeService : IEmployeeService
                 """,
                 employee
         );
+        dbConnection.Dispose();
 
         return employee;
     }
