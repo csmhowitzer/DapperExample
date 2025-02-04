@@ -37,8 +37,8 @@ public class RoleService : IRoleService
         using var dbConnection = await _connectionFactory.CreateConnectionAsync();
         await dbConnection.ExecuteAsync(
             """
-            INSERT INTO Roles (Name, Description)
-            VALUES (@Name, @Description);
+            INSERT INTO Roles (Name, Desc)
+            VALUES (@Name, @Desc);
             """,
             role
         );
@@ -83,7 +83,7 @@ public class RoleService : IRoleService
             """
             UPDATE Roles
             SET Name = @Name,
-                Description = @Description
+                Desc = @Desc
             WHERE ID = @Id
             """,
             role

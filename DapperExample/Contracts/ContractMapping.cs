@@ -27,7 +27,7 @@ public static class ContractMapping
         {
             Id = -1,
             Name = request.Name,
-            Description = request.Description
+            Desc = request.Desc
         };
     }
 
@@ -48,7 +48,7 @@ public static class ContractMapping
         {
             Id = id,
             Name = request.Name,
-            Description = request.Description
+            Desc = request.Desc
         };
     }
 
@@ -69,7 +69,7 @@ public static class ContractMapping
         {
             Id = role.Id,
             Name = role.Name,
-            Description = role.Description
+            Desc = role.Desc
         };
     }
 

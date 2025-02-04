@@ -1,6 +1,7 @@
 using FluentValidation;
 using DapperExample.Employees;
 using DapperExample.Database;
+using DapperExample.Roles;
 
 namespace DapperExample;
 
@@ -20,6 +21,7 @@ public class Program
         );
 
         builder.Services.AddSingleton<IEmployeeService, EmployeeService>();
+        builder.Services.AddSingleton<IRoleService, RoleService>();
         builder.Services.AddValidatorsFromAssemblyContaining<Program>(ServiceLifetime.Singleton);
 
         var app = builder.Build();
@@ -31,6 +33,7 @@ public class Program
         }
 
         app.MapEmployeeEndpoints();
+        app.MapRoleEndpoints();
 
         app.Run();
     }

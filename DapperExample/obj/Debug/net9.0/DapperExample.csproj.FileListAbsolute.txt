@@ -143,3 +143,4 @@
 /Users/brandonholbert/Documents/Projects/examples/csharp/random/dapperexample/DapperExample/obj/Debug/net9.0/DapperExample.pdb
 /Users/brandonholbert/Documents/Projects/examples/csharp/random/dapperexample/DapperExample/obj/Debug/net9.0/DapperExample.genruntimeconfig.cache
 /Users/brandonholbert/Documents/Projects/examples/csharp/random/dapperexample/DapperExample/obj/Debug/net9.0/ref/DapperExample.dll
+/Users/wwmac/Documents/projects/examples/csharp/random/DapperExample/DapperExample/obj/Debug/net9.0/DapperExample.sourcelink.json
