@@ -37,7 +37,7 @@ public class EmployeeService : IEmployeeService
         using var dbConnection = await _connectionFactory.CreateConnectionAsync();
         await dbConnection.ExecuteAsync(
                 """
-                INSERT INTO Employee (Fname, LName, Email)
+                INSERT INTO Employees (Fname, LName, Email)
                 VALUES (@FName, @LName, @Email);
                 """,
                 employee
@@ -97,7 +97,7 @@ public class EmployeeService : IEmployeeService
     {
         using var dbConnection = await _connectionFactory.CreateConnectionAsync();
         var result = await dbConnection.ExecuteAsync(
-            "DELETE FROM Employees WHERE ID = @id:",
+            "DELETE FROM Employees WHERE ID = @id;",
             new { id }
         );
         return result > 0;
