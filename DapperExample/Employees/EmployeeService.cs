@@ -37,21 +37,26 @@ public class EmployeeService : IEmployeeService
         using var dbConnection = await _connectionFactory.CreateConnectionAsync();
         await dbConnection.ExecuteAsync(
                 """
-                INSERT INTO Employees (Fname, LName, Email)
-                VALUES (@FName, @LName, @Email);
-                
-                DECLARE @RoleId INTEGER = 
-                    (SELECT ID FROM Roles
-                     WHERE Name = @RoleName);
+                INSERT INTO Employees (FName, LName, Email, CreatedDate, ModifiedDate)
+                VALUES (@FName, @LName, @Email, datetime('now'), datetime('now'));
 
-                DECLARE @EmpId INTEGER = 
-                    (SELECT ID FROM Roles 
-                     WHERE FName = @FName
-                     AND LName = @LName
-                     AND Email = @Email);
-
-                INSERT INTO EmployeeRoles (EmployeeId, RoleId)
-                VALUES (@EmpId, @RoleId);
+                INSERT INTO EmployeeRoles (EmployeeId, RoleId, CreatedDate)
+                SELECT
+                    e.ID,
+                    r.ID,
+                    datetime('now')
+                FROM 
+                (
+                    SELECT ID FROM Employees
+                    WHERE FName = @FName
+                    AND LName = @LName
+                    AND Email = @Email
+                ) AS e,
+                (
+                    SELECT ID FROM Roles
+                    WHERE Name = @RoleName
+                ) AS r
+                WHERE EXISTS (SELECT 1 FROM Roles WHERE Name = @RoleName);
                 """,
                 employee
         );
@@ -69,6 +74,7 @@ public class EmployeeService : IEmployeeService
                 e.ID AS {nameof(Employee.Id)},
                 e.FName AS {nameof(Employee.FName)},
                 e.LName AS {nameof(Employee.LName)},
+                e.Email AS {nameof(Employee.Email)},
                 r.Name AS {nameof(Employee.RoleName)}
             FROM Employees e
             INNER JOIN EmployeeRoles er ON e.ID = er.EmployeeId
@@ -89,6 +95,7 @@ public class EmployeeService : IEmployeeService
                 e.ID AS {nameof(Employee.Id)},
                 e.FName AS {nameof(Employee.FName)},
                 e.LName AS {nameof(Employee.LName)},
+                e.Email AS {nameof(Employee.Email)},
                 r.Name AS {nameof(Employee.RoleName)}
             FROM Employees e
             INNER JOIN EmployeeRoles er ON e.ID = er.EmployeeId
@@ -115,9 +122,10 @@ public class EmployeeService : IEmployeeService
         await dbConnection.ExecuteAsync(
             """
             UPDATE Employees 
-            SET FName = @FName
-                LName = @LName
-                Email = @Email
+            SET FName = @FName,
+                LName = @LName,
+                Email = @Email,
+                ModifiedDate = datetime('now')
             WHERE ID = @Id
             """,
             employee
