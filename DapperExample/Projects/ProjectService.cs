@@ -1,3 +1,4 @@
+using Dapper;
 using DapperExample.Database;
 using DapperExample.Projects;
 using DapperExample.Validation;
@@ -25,29 +26,83 @@ public class ProjectServic : IProjectService
         _connectionFactory = connectionFactory;
     }
 
-    public Task<Result<Project, ValidationFailed>> Create(Project project)
+    public async Task<Result<Project, ValidationFailed>> Create(Project project)
     {
-        throw new NotImplementedException();
+        var validationResult = await _validator.ValidateAsync(project);
+        if(!validationResult.IsValid)
+        {
+            return new ValidationFailed(validationResult.Errors);
+        }
+
+        using var dbConnection = await _connectionFactory.CreateConnectionAsync();
+        await dbConnection.ExecuteAsync(
+            """
+            INSERT INTO Projects (Name, Description, StartDate, EndDate, OwnerId) 
+            VALUES (@Name, @Description, @StartDate, @EndDate, @OwnerId);
+            """,
+            project
+        );
+
+        return project;
     }
 
-    public Task<Project?> GetById(int id)
+    public async Task<Project?> GetById(int id)
     {
-        throw new NotImplementedException();
+        using var dbConnection = await _connectionFactory.CreateConnectionAsync();
+        var project = await dbConnection.QuerySingleOrDefaultAsync<Project>(
+            "SELECT * FROM Projects WHERE ID = @Id;",
+            new { id }
+        );
+        return project;
     }
 
-    public Task<IEnumerable<Project>> GetAll()
+    public async Task<IEnumerable<Project>> GetAll()
     {
-        throw new NotImplementedException();
+        using var dbConnection = await _connectionFactory.CreateConnectionAsync();
+        return await dbConnection.QueryAsync<Project>(
+            "SELECT * FROM Projects;"
+        );
     }
 
-    public Task<Result<Project?, ValidationFailed>> Update(Project project)
+    public async Task<Result<Project?, ValidationFailed>> Update(Project project)
     {
-        throw new NotImplementedException();
+        var validationResult = await _validator.ValidateAsync(project);
+        if(!validationResult.IsValid)
+        {
+            return new ValidationFailed(validationResult.Errors);
+        }
+
+        var existingProj = await GetById(project.Id);
+        if(existingProj is null)
+        {
+            return default(Project?);
+        }
+
+        using var dbConnection = await _connectionFactory.CreateConnectionAsync();
+        await dbConnection.ExecuteAsync(
+            """
+            UPDATE Projects
+            SET Name = @Name,
+                Description = @Description,
+                StartDate = @StartDate,
+                EndDate = @EndDate,
+                OwnerId = @OwnerId
+            WHERE ID = @Id;
+            """,
+            project
+        );
+
+        return project;
     }
 
-    public Task<bool> DeleteById(int id)
+    public async Task<bool> DeleteById(int id)
     {
-        throw new NotImplementedException();
+        using var dbConnection = await _connectionFactory.CreateConnectionAsync();
+        var deleted = await dbConnection.ExecuteAsync(
+            "DELETE FROM Projects WHERE ID = @Id;",
+            new { id }
+        );
+        return deleted > 0;
     }
 }
 
