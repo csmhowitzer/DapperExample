@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "/Users/wwmac/Documents/projects/examples/csharp/random/DapperExample/DapperExample/DapperExample.csproj": {}
+    "/Users/brandonholbert/Documents/Projects/examples/csharp/random/dapperexample/DapperExample/DapperExample.csproj": {}
   },
   "projects": {
-    "/Users/wwmac/Documents/projects/examples/csharp/random/DapperExample/DapperExample/DapperExample.csproj": {
+    "/Users/brandonholbert/Documents/Projects/examples/csharp/random/dapperexample/DapperExample/DapperExample.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/wwmac/Documents/projects/examples/csharp/random/DapperExample/DapperExample/DapperExample.csproj",
+        "projectUniqueName": "/Users/brandonholbert/Documents/Projects/examples/csharp/random/dapperexample/DapperExample/DapperExample.csproj",
         "projectName": "DapperExample",
-        "projectPath": "/Users/wwmac/Documents/projects/examples/csharp/random/DapperExample/DapperExample/DapperExample.csproj",
-        "packagesPath": "/Users/wwmac/.nuget/packages/",
-        "outputPath": "/Users/wwmac/Documents/projects/examples/csharp/random/DapperExample/DapperExample/obj/",
+        "projectPath": "/Users/brandonholbert/Documents/Projects/examples/csharp/random/dapperexample/DapperExample/DapperExample.csproj",
+        "packagesPath": "/Users/brandonholbert/.nuget/packages/",
+        "outputPath": "/Users/brandonholbert/Documents/Projects/examples/csharp/random/dapperexample/DapperExample/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/Users/wwmac/.nuget/NuGet/NuGet.Config"
+          "/Users/brandonholbert/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net9.0"

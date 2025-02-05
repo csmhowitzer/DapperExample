@@ -39,6 +39,19 @@ public class EmployeeService : IEmployeeService
                 """
                 INSERT INTO Employees (Fname, LName, Email)
                 VALUES (@FName, @LName, @Email);
+                
+                DECLARE @RoleId INTEGER = 
+                    (SELECT ID FROM Roles
+                     WHERE Name = @RoleName);
+
+                DECLARE @EmpId INTEGER = 
+                    (SELECT ID FROM Roles 
+                     WHERE FName = @FName
+                     AND LName = @LName
+                     AND Email = @Email);
+
+                INSERT INTO EmployeeRoles (EmployeeId, RoleId)
+                VALUES (@EmpId, @RoleId);
                 """,
                 employee
         );
@@ -51,7 +64,17 @@ public class EmployeeService : IEmployeeService
     {
         using var dbConnection = await _connectionFactory.CreateConnectionAsync();
         var employee = await dbConnection.QuerySingleOrDefaultAsync<Employee>(
-            "SELECT * FROM Employees WHERE ID = @id LIMIT 1;",
+            $"""
+            SELECT 
+                e.ID AS {nameof(Employee.Id)},
+                e.FName AS {nameof(Employee.FName)},
+                e.LName AS {nameof(Employee.LName)},
+                r.Name AS {nameof(Employee.RoleName)}
+            FROM Employees e
+            INNER JOIN EmployeeRoles er ON e.ID = er.EmployeeId
+            INNER JOIN Roles r ON er.RoleId = r.ID
+            WHERE e.ID = @id LIMIT 1;
+            """,
             new { id }
         );
         return employee;
@@ -61,7 +84,16 @@ public class EmployeeService : IEmployeeService
     {
         using var dbConnection = await _connectionFactory.CreateConnectionAsync();
         return await dbConnection.QueryAsync<Employee>(
-                "SELECT * FROM Employees;"
+            $"""
+            SELECT 
+                e.ID AS {nameof(Employee.Id)},
+                e.FName AS {nameof(Employee.FName)},
+                e.LName AS {nameof(Employee.LName)},
+                r.Name AS {nameof(Employee.RoleName)}
+            FROM Employees e
+            INNER JOIN EmployeeRoles er ON e.ID = er.EmployeeId
+            INNER JOIN Roles r ON er.RoleId = r.ID
+            """
         );
     }
 

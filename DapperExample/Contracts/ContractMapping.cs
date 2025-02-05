@@ -17,7 +17,8 @@ public static class ContractMapping
             Id = -1,
             FName = request.FName,
             LName = request.LName,
-            Email = request.Email
+            Email = request.Email,
+            RoleName = request.RoleName
         };
     }
 
@@ -38,7 +39,8 @@ public static class ContractMapping
             Id = id,
             FName = request.FName,
             LName = request.LName,
-            Email = request.Email
+            Email = request.Email,
+            RoleName = request.RoleName
         };
     }
 
@@ -59,7 +61,8 @@ public static class ContractMapping
             Id = employee.Id,
             FName = employee.FName,
             LName = employee.LName,
-            Email = employee.Email
+            Email = employee.Email,
+            RoleName = employee.RoleName
         };
     }
 

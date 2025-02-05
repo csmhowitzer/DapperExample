@@ -6,4 +6,5 @@ public class Employee
     public required string FName { get; set; }
     public required string LName { get; set; }
     public required string Email { get; set; }
+    public required string RoleName { get; set; }
 }
