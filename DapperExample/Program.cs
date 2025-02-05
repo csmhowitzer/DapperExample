@@ -2,6 +2,8 @@ using FluentValidation;
 using DapperExample.Employees;
 using DapperExample.Database;
 using DapperExample.Roles;
+using DapperExample.WorkItems;
+using DapperExample.Projects;
 
 namespace DapperExample;
 
@@ -34,6 +36,8 @@ public class Program
 
         app.MapEmployeeEndpoints();
         app.MapRoleEndpoints();
+        app.MapWorkItemEndpoints();
+        app.MapProjectEndpoints();
 
         app.Run();
     }

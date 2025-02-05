@@ -5,7 +5,7 @@ namespace DapperExample.WorkItems;
 
 public static class WorkItemEndpionts
 {
-    public static void MapToWorkItem(this WebApplication app)
+    public static void MapWorkItemEndpoints(this WebApplication app)
     {
         var group = app.MapGroup("workitems");
         group.MapPost(

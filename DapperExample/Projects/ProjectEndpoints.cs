@@ -5,7 +5,7 @@ namespace DapperExample.Projects;
 
 public static class ProjectEndpoints
 {
-    public static void MapToProjectEndpoints(this WebApplication app)
+    public static void MapProjectEndpoints(this WebApplication app)
     {
         var group = app.MapGroup("projects");
         group.MapPost(
