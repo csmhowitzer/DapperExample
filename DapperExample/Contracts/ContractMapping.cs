@@ -3,8 +3,9 @@ using DapperExample.Employees;
 using DapperExample.Validation;
 using DapperExample.Contracts.Requests;
 using DapperExample.Contracts.Responses;
-using System.Linq;
 using DapperExample.Roles;
+using DapperExample.WorkItems;
+using DapperExample.Projects;
 
 namespace DapperExample.Contracts;
 
@@ -32,6 +33,35 @@ public static class ContractMapping
         };
     }
 
+    public static WorkItem MapToTask(this CreateTaskRequest request)
+    {
+        return new WorkItem
+        {
+            Id = -1,
+            TaskName = request.TaskName,
+            Description = request.Description,
+            StartDate = request.StartDate,
+            DueDate = request.DueDate,
+            ProjectId = request.ProjectId,
+            StatusId = request.StatusId,
+            Estimate = request.Estimate,
+            PriorityId = request.PriorityId
+        };
+    }
+
+    public static Project MapToProject(this CreateProjectRequest request)
+    {
+        return new Project
+        {
+            Id = -1,
+            Name = request.Name,
+            Description = request.Description,
+            StartDate = request.StartDate,
+            EndDate = request.EndDate,
+            OwnerId = request.OwnerId
+        };
+    }
+
     public static Employee MapToEmployee(this UpdateEmployeeRequest request, int id)
     {
         return new Employee
@@ -51,6 +81,35 @@ public static class ContractMapping
             Id = id,
             Name = request.Name,
             Desc = request.Desc
+        };
+    }
+
+    public static WorkItem MapToTask(this UpdateTaskRequest request, int id)
+    {
+        return new WorkItem
+        {
+            Id = id,
+            TaskName = request.TaskName,
+            Description = request.Description,
+            StartDate = request.StartDate,
+            DueDate = request.DueDate,
+            ProjectId = request.ProjectId,
+            StatusId = request.StatusId,
+            Estimate = request.Estimate,
+            PriorityId = request.PriorityId
+        };
+    }
+
+    public static Project MapToProject(this UpdateProjectRequest request, int id)
+    {
+        return new Project
+        {
+            Id = id, 
+            Name = request.Name,
+            Description = request.Description,
+            StartDate = request.StartDate,
+            EndDate = request.EndDate,
+            OwnerId = request.OwnerId
         };
     }
 
@@ -76,6 +135,35 @@ public static class ContractMapping
         };
     }
 
+    public static TaskResponse MapToResponse(this WorkItem task)
+    {
+        return new TaskResponse
+        {
+            Id = task.Id,
+            TaskName = task.TaskName,
+            Description = task.Description,
+            StartDate = task.StartDate,
+            DueDate = task.DueDate,
+            ProjectId = task.ProjectId,
+            StatusId = task.StatusId,
+            Estimate = task.Estimate,
+            PriorityId = task.PriorityId
+        };
+    }
+
+    public static ProjectResponse MapToResponse(this Project project)
+    {
+        return new ProjectResponse
+        {
+            Id = project.Id,
+            Name = project.Name,
+            Descripttion = project.Description,
+            StartDate = project.StartDate,
+            EndDate = project.EndDate,
+            OwnerId = project.OwnerId
+        };
+    }
+
     public static EmployeesResponse MapToResponse(this IEnumerable<Employee> employees)
     {
         return new EmployeesResponse { Items = employees.Select(MapToResponse) };
@@ -84,6 +172,16 @@ public static class ContractMapping
     public static RolesResponse MapToResponse(this IEnumerable<Role> roles)
     {
         return new RolesResponse { Items = roles.Select(MapToResponse) };
+    }
+
+    public static TasksResponse MapToResponse(this IEnumerable<WorkItem> tasks)
+    {
+        return new TasksResponse { Items = tasks.Select(MapToResponse) };
+    }
+
+    public static ProjectsResponse MapToResponse(this IEnumerable<Project> projects)
+    {
+        return new ProjectsResponse { Items = projects.Select(MapToResponse) };
     }
 
     public static ValidationFailureResponse MapToResponse(this IEnumerable<ValidationFailure> validationFailures)
