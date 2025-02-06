@@ -42,6 +42,15 @@ public static class ProjectEndpoints
                 return Results.Ok(response);
             }
         );
+        group.MapGet(
+            "tasks/id/{id:int}",
+            async (IProjectService service, int id) =>
+            {
+                var result = await service.GetNestedById(id);
+                return result is not null ? Results.Ok(result.MapToResponse())
+                                          : Results.NotFound();
+            }
+        ).WithName("GetProjectTasks");
         group.MapPut(
             "id/{id:int}",
             async (IProjectService service, int id, UpdateProjectRequest request) =>

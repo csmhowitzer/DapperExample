@@ -2,6 +2,7 @@ using Dapper;
 using DapperExample.Database;
 using DapperExample.Projects;
 using DapperExample.Validation;
+using DapperExample.WorkItems;
 using FluentValidation;
 
 namespace DapperExample;
@@ -10,6 +11,7 @@ public interface IProjectService
 {
     public Task<Result<Project, ValidationFailed>> Create(Project project);
     public Task<Project?> GetById(int id);
+    public Task<ProjectTask?> GetNestedById(int id);
     public Task<IEnumerable<Project>> GetAll();
     public Task<Result<Project?, ValidationFailed>> Update(Project project);
     public Task<bool> DeleteById(int id);
@@ -62,6 +64,49 @@ public class ProjectService : IProjectService
         return await dbConnection.QueryAsync<Project>(
             "SELECT * FROM Projects;"
         );
+    }
+
+    public async Task<ProjectTask?> GetNestedById(int id)
+    {
+        using var dbConnection = await _connectionFactory.CreateConnectionAsync();
+        var project = await dbConnection.QueryAsync<ProjectTask?, WorkItem, ProjectTask?>(
+            """
+            SELECT
+                p.Id,
+                p.Name,
+                p.Description,
+                t.TaskName,
+                t.Description,
+                t.DueDate
+            FROM Projects p
+            INNER JOIN Tasks t ON p.ID = t.ProjectId
+            WHERE p.ID = @Id
+            GROUP BY p.Id,
+                     p.Name,
+                     p.Description,
+                     t.TaskName,
+                     t.Description,
+                     t.DueDate;
+            """,
+            (proj, workItem) =>
+            {
+                if(proj is null)
+                {
+                    return default(ProjectTask);
+                }
+                if(proj.WorkItems is null)
+                {
+                    proj.WorkItems = new List<WorkItem>();
+                }
+
+                proj.WorkItems.Add(workItem);
+                return proj;
+
+            },
+            new { Id = id },
+            splitOn: "TaskName"
+        );
+        return (ProjectTask?)project.FirstOrDefault();
     }
 
     public async Task<Result<Project?, ValidationFailed>> Update(Project project)

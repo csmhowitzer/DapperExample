@@ -164,6 +164,17 @@ public static class ContractMapping
         };
     }
 
+    public static ProjectTaskResponse MapToResponse(this ProjectTask project)
+    {
+        return new ProjectTaskResponse
+        {
+            Id = project.Id,
+            Name = project.Name,
+            Description = project.Description,
+            WorkItems = project.WorkItems.Select(x => x.MapToResponse())
+        };
+    }
+
     public static EmployeesResponse MapToResponse(this IEnumerable<Employee> employees)
     {
         return new EmployeesResponse { Items = employees.Select(MapToResponse) };
