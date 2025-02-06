@@ -15,12 +15,12 @@ public interface IProjectService
     public Task<bool> DeleteById(int id);
 }
 
-public class ProjectServic : IProjectService
+public class ProjectService : IProjectService
 {
     private readonly IValidator<Project> _validator;
     private readonly IDbConnectionFactory _connectionFactory;
 
-    public ProjectServic(IValidator<Project> validator, IDbConnectionFactory connectionFactory)
+    public ProjectService(IValidator<Project> validator, IDbConnectionFactory connectionFactory)
     {
         _validator = validator;
         _connectionFactory = connectionFactory;

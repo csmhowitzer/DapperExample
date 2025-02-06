@@ -33,7 +33,7 @@ public static class ContractMapping
         };
     }
 
-    public static WorkItem MapToTask(this CreateTaskRequest request)
+    public static WorkItem MapToWorkItem(this CreateWorkItemRequest request)
     {
         return new WorkItem
         {
@@ -84,7 +84,7 @@ public static class ContractMapping
         };
     }
 
-    public static WorkItem MapToTask(this UpdateTaskRequest request, int id)
+    public static WorkItem MapToWorkItem(this UpdateWorkItemRequest request, int id)
     {
         return new WorkItem
         {
@@ -135,19 +135,19 @@ public static class ContractMapping
         };
     }
 
-    public static TaskResponse MapToResponse(this WorkItem task)
+    public static WorkItemResponse MapToResponse(this WorkItem workItem)
     {
-        return new TaskResponse
+        return new WorkItemResponse
         {
-            Id = task.Id,
-            TaskName = task.TaskName,
-            Description = task.Description,
-            StartDate = task.StartDate,
-            DueDate = task.DueDate,
-            ProjectId = task.ProjectId,
-            StatusId = task.StatusId,
-            Estimate = task.Estimate,
-            PriorityId = task.PriorityId
+            Id = workItem.Id,
+            TaskName = workItem.TaskName,
+            Description = workItem.Description,
+            StartDate = workItem.StartDate,
+            DueDate = workItem.DueDate,
+            ProjectId = workItem.ProjectId,
+            StatusId = workItem.StatusId,
+            Estimate = workItem.Estimate,
+            PriorityId = workItem.PriorityId
         };
     }
 
@@ -174,9 +174,9 @@ public static class ContractMapping
         return new RolesResponse { Items = roles.Select(MapToResponse) };
     }
 
-    public static TasksResponse MapToResponse(this IEnumerable<WorkItem> tasks)
+    public static WorkItemsResponse MapToResponse(this IEnumerable<WorkItem> workItem)
     {
-        return new TasksResponse { Items = tasks.Select(MapToResponse) };
+        return new WorkItemsResponse { Items = workItem.Select(MapToResponse) };
     }
 
     public static ProjectsResponse MapToResponse(this IEnumerable<Project> projects)

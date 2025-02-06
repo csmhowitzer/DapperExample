@@ -8,10 +8,10 @@ namespace DapperExample;
 
 public interface IWorkItemService
 {
-    public Task<Result<WorkItem, ValidationFailed>> Create(WorkItem task);
+    public Task<Result<WorkItem, ValidationFailed>> Create(WorkItem workItem);
     public Task<WorkItem?> GetById(int id);
     public Task<IEnumerable<WorkItem>> GetAll();
-    public Task<Result<WorkItem?, ValidationFailed>> Update(WorkItem task);
+    public Task<Result<WorkItem?, ValidationFailed>> Update(WorkItem workItem);
     public Task<bool> DeleteById(int id);
 }
 
@@ -26,9 +26,9 @@ public class WorkItemService : IWorkItemService
         _connectionFactory = connectionFactory;
     }
 
-    public async Task<Result<WorkItem, ValidationFailed>> Create(WorkItem task)
+    public async Task<Result<WorkItem, ValidationFailed>> Create(WorkItem workItem)
     {
-        var validationResult = await _validator.ValidateAsync(task);
+        var validationResult = await _validator.ValidateAsync(workItem);
         if(!validationResult.IsValid)
         {
             return new ValidationFailed(validationResult.Errors);
@@ -46,10 +46,10 @@ public class WorkItemService : IWorkItemService
                  @ProjectId, @StatusId, @Estimate, @PriorityId, 
                  datetime('now'), datetime('now')),
             """,
-            task
+            workItem
         );
 
-        return task;
+        return workItem;
     }
 
     public async Task<WorkItem?> GetById(int id)
@@ -71,16 +71,16 @@ public class WorkItemService : IWorkItemService
         );
     }
 
-    public async Task<Result<WorkItem?, ValidationFailed>> Update(WorkItem task)
+    public async Task<Result<WorkItem?, ValidationFailed>> Update(WorkItem workItem)
     {
-        var validationResult = await _validator.ValidateAsync(task);
+        var validationResult = await _validator.ValidateAsync(workItem);
         if(!validationResult.IsValid)
         {
             return new ValidationFailed(validationResult.Errors);
         }
 
-        var existingTask = await GetById(task.Id);
-        if(existingTask is null)
+        var existingWorkItem = await GetById(workItem.Id);
+        if(existingWorkItem is null)
         {
             return default(WorkItem?);
         }
@@ -99,10 +99,10 @@ public class WorkItemService : IWorkItemService
                 PriorityId = @PriorityId
             WHERE ID = @Id
             """,
-            task
+            workItem
         );
 
-        return task;
+        return workItem;
     }
 
     public async Task<bool> DeleteById(int id)

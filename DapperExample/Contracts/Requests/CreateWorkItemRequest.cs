@@ -1,6 +1,6 @@
 namespace DapperExample.Contracts.Requests;
 
-public class CreateTaskRequest
+public class CreateWorkItemRequest
 {
     public required string TaskName { get; init; }
     public required string Description { get; init; }

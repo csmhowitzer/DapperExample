@@ -10,13 +10,13 @@ public static class WorkItemEndpionts
         var group = app.MapGroup("workitems");
         group.MapPost(
             "/",
-            async (IWorkItemService service, CreateTaskRequest request) =>
+            async (IWorkItemService service, CreateWorkItemRequest request) =>
             {
-                var workItem = request.MapToTask();
+                var workItem = request.MapToWorkItem();
                 var result = await service.Create(workItem);
                 return result.Match<IResult>(_ =>
                     Results.CreatedAtRoute(
-                        "GetTask",
+                        "GetWorkItem",
                         new { id = workItem.Id },
                         workItem.MapToResponse()
                     ),
@@ -32,7 +32,7 @@ public static class WorkItemEndpionts
                 return result is not null ? Results.Ok(result.MapToResponse())
                                           : Results.NotFound();
             }
-        ).WithName("GetTask");
+        ).WithName("GetWorkItem");
         group.MapGet(
             "/",
             async (IWorkItemService service) =>
@@ -44,9 +44,9 @@ public static class WorkItemEndpionts
         );
         group.MapPut(
             "id/{id:int}",
-            async (IWorkItemService service, int id, UpdateTaskRequest request) =>
+            async (IWorkItemService service, int id, UpdateWorkItemRequest request) =>
             {
-                var workItem = request.MapToTask(id);
+                var workItem = request.MapToWorkItem(id);
                 var result = await service.Update(workItem);
                 return result.Match<IResult>(
                     t => t is not null ? Results.Ok(t.MapToResponse()) : Results.NotFound(),

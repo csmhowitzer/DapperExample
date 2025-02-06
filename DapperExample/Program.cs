@@ -24,6 +24,8 @@ public class Program
 
         builder.Services.AddSingleton<IEmployeeService, EmployeeService>();
         builder.Services.AddSingleton<IRoleService, RoleService>();
+        builder.Services.AddSingleton<IWorkItemService, WorkItemService>();
+        builder.Services.AddSingleton<IProjectService, ProjectService>();
         builder.Services.AddValidatorsFromAssemblyContaining<Program>(ServiceLifetime.Singleton);
 
         var app = builder.Build();

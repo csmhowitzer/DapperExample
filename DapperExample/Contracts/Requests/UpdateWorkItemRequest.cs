@@ -1,8 +1,7 @@
-namespace DapperExample.Contracts.Responses;
+namespace DapperExample.Contracts.Requests;
 
-public class TaskResponse
+public class UpdateWorkItemRequest
 {
-    public required int Id { get; init; }
     public required string TaskName { get; init; }
     public required string Description { get; init; }
     public required string StartDate { get; init; }
@@ -12,4 +11,3 @@ public class TaskResponse
     public required int Estimate { get; init; }
     public required int PriorityId { get; init; }
 }
-
