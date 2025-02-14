@@ -1,12 +1,12 @@
+using Dapper;
+using DapperExample.Database;
 using DapperExample.Employees;
 using DapperExample.Validation;
-using Dapper;
 using FluentValidation;
-using DapperExample.Database;
 
 namespace DapperExample;
 
-public interface IEmployeeService 
+public interface IEmployeeService
 {
     public Task<Result<Employee, ValidationFailed>> Create(Employee dto);
     public Task<Employee?> GetById(int id);
@@ -36,29 +36,29 @@ public class EmployeeService : IEmployeeService
 
         using var dbConnection = await _connectionFactory.CreateConnectionAsync();
         await dbConnection.ExecuteAsync(
-                """
-                INSERT INTO Employees (FName, LName, Email, CreatedDate, ModifiedDate)
-                VALUES (@FName, @LName, @Email, datetime('now'), datetime('now'));
+            """
+            INSERT INTO Employees (FName, LName, Email, CreatedDate, ModifiedDate)
+            VALUES (@FName, @LName, @Email, datetime('now'), datetime('now'));
 
-                INSERT INTO EmployeeRoles (EmployeeId, RoleId, CreatedDate)
-                SELECT
-                    e.ID,
-                    r.ID,
-                    datetime('now')
-                FROM 
-                (
-                    SELECT ID FROM Employees
-                    WHERE FName = @FName
-                    AND LName = @LName
-                    AND Email = @Email
-                ) AS e,
-                (
-                    SELECT ID FROM Roles
-                    WHERE Name = @RoleName
-                ) AS r
-                WHERE EXISTS (SELECT 1 FROM Roles WHERE Name = @RoleName);
-                """,
-                employee
+            INSERT INTO EmployeeRoles (EmployeeId, RoleId, CreatedDate)
+            SELECT
+                e.ID,
+                r.ID,
+                datetime('now')
+            FROM 
+            (
+                SELECT ID FROM Employees
+                WHERE FName = @FName
+                AND LName = @LName
+                AND Email = @Email
+            ) AS e,
+            (
+                SELECT ID FROM Roles
+                WHERE Name = @RoleName
+            ) AS r
+            WHERE EXISTS (SELECT 1 FROM Roles WHERE Name = @RoleName);
+            """,
+            employee
         );
         dbConnection.Dispose();
 

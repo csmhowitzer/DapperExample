@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Mvc;
 using DapperExample.Contracts;
 using DapperExample.Contracts.Requests;
 
@@ -16,28 +15,32 @@ public static class EmployeeEndpoints
             {
                 var employee = request.MapToEmployee();
                 var result = await service.Create(employee);
-                return result.Match<IResult>(_ =>
-                    Results.CreatedAtRoute(
-                        "GetEmployee",
-                        new { id = employee.Id },
-                        employee.MapToResponse()
-                    ),
+                return result.Match<IResult>(
+                    _ =>
+                        Results.CreatedAtRoute(
+                            "GetEmployee",
+                            new { id = employee.Id },
+                            employee.MapToResponse()
+                        ),
                     failed => Results.BadRequest(failed.MapToResponse())
                 );
             }
         );
-        group.MapGet(
-            "/{id:int}",
-            async (IEmployeeService service, int id) =>
-            {
-                var result = await service.GetById(id);
-                return result is not null ? Results.Ok(result.MapToResponse())
-                                          : Results.NotFound();
-            }
-        ).WithName("GetEmployee");
+        group
+            .MapGet(
+                "/{id:int}",
+                async (IEmployeeService service, int id) =>
+                {
+                    var result = await service.GetById(id);
+                    return result is not null
+                        ? Results.Ok(result.MapToResponse())
+                        : Results.NotFound();
+                }
+            )
+            .WithName("GetEmployee");
         group.MapGet(
             "/",
-            async (IEmployeeService service) => 
+            async (IEmployeeService service) =>
             {
                 var employees = await service.GetAll();
                 var response = employees.MapToResponse();
@@ -46,7 +49,7 @@ public static class EmployeeEndpoints
         );
         group.MapPut(
             "/{id:int}",
-            async (IEmployeeService service, int id, UpdateEmployeeRequest request) => 
+            async (IEmployeeService service, int id, UpdateEmployeeRequest request) =>
             {
                 var employee = request.MapToEmployee(id);
                 var result = await service.Update(employee);
@@ -59,7 +62,7 @@ public static class EmployeeEndpoints
         );
         group.MapDelete(
             "/{id:int}",
-            async(IEmployeeService service, int id) =>
+            async (IEmployeeService service, int id) =>
             {
                 var deleted = await service.DeleteById(id);
                 return deleted ? Results.Ok() : Results.NotFound();
